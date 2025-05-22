@@ -1,103 +1,855 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+import { useState, useEffect, useRef } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import {
+  Code,
+  User,
+  Briefcase,
+  GraduationCap,
+  Mail,
+  Github,
+  Linkedin,
+  ExternalLink,
+  ChevronRight,
+  Menu,
+  X,
+  ArrowRight,
+  Moon,
+  Sun,
+} from "lucide-react"
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { HoverEffect } from "@/components/ui/card-hover"
+import { FlipWords } from "@/components/flip-words"
+import { GlowingEffectDemo } from "@/components/ui/GlowingEffect"
+import Hero from "@/components/ui/Hero"
+
+export default function PortfolioV2() {
+  const [activeSection, setActiveSection] = useState("home")
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [darkMode, setDarkMode] = useState(true)
+
+  // Cambiar tema claro/oscuro
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark")
+    } else {
+      document.documentElement.classList.remove("dark")
+    }
+  }, [darkMode])
+
+  // Cambiar sección activa basado en scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll("section")
+      const scrollPosition = window.scrollY + 100
+
+      sections.forEach((section) => {
+        const sectionTop = section.offsetTop
+        const sectionHeight = section.offsetHeight
+
+        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+          setActiveSection(section.id)
+        }
+      })
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  const navItems = [
+    { id: "home", label: "Home", icon: <Code size={18} /> },
+    { id: "about", label: "About", icon: <User size={18} /> },
+    { id: "projects", label: "Projects", icon: <Briefcase size={18} /> },
+    { id: "education", label: "Internships", icon: <GraduationCap size={18} /> },
+    { id: "contact", label: "Contact", icon: <Mail size={18} /> },
+  ]
+
+  const skills = [
+    { category: "Backend", items: ["Java", "SpringBoot", "Node.js", "Express", "MongoDB", "SQL"] },
+    { category: "Frontend", items: ["HTML", "CSS", "JavaScript", "React"] },
+    { category: "Tools", items: ["Git", "GitHub", "VS Code"] },
+  ]
+
+  const words = ["robust", "scalable", "efficient", "reliable"];
+
+  const education = [
+    {
+      period: "2021 - 2024",
+      title: "Grado en ",
+      institution: "Institute Of Information Management And Technology",
+      description: "Estudios centrados en desarrollo web, programación y diseño de interfaces.",
+    },
+    {
+      period: "2023",
+      title: "Bootcamp de Desarrollo Frontend",
+      institution: "Academia Código",
+      description: "Formación intensiva en React, JavaScript moderno y desarrollo de aplicaciones web.",
+    },
+    {
+      period: "En curso",
+      title: "Certificación en UX/UI Design",
+      institution: "Plataforma Online",
+      description: "Aprendiendo principios de diseño de experiencia de usuario e interfaces.",
+    },
+  ]
+
+  const CodeEditorAnimation = () => {
+    const canvasRef = useRef<HTMLCanvasElement>(null)
+    const [isAnimating, setIsAnimating] = useState(true)
+
+    useEffect(() => {
+      const canvas = canvasRef.current
+      if (!canvas) return
+
+      const ctx = canvas.getContext("2d")
+      if (!ctx) return
+
+      // Set canvas dimensions to match the container
+      const updateCanvasSize = () => {
+        const container = canvas.parentElement
+        if (container) {
+          // Set a fixed aspect ratio to ensure content fits
+          const width = Math.min(600, container.clientWidth)
+          const height = Math.min(400, width * 0.8)
+
+          canvas.width = width
+          canvas.height = height
+
+          // Update canvas style dimensions
+          canvas.style.width = `${width}px`
+          canvas.style.height = `${height}px`
+        }
+      }
+
+      // Initial size update
+      updateCanvasSize()
+
+      // Listen for resize events
+      window.addEventListener("resize", updateCanvasSize)
+
+      // Colors
+      const colors = {
+        background: "#0f172a", // Darker background
+        text: "#e2e8f0",
+        comment: "#94a3b8",
+        keyword: "#8b5cf6",
+        string: "#10b981",
+        function: "#3b82f6",
+        variable: "#f59e0b",
+        cursor: "#f8fafc",
+      }
+
+      // Code lines - shortened to ensure they fit
+      const codeLines = [
+        { text: "// Software Engineer Portfolio", color: colors.comment },
+        { text: "import React from 'react';", color: colors.keyword },
+        { text: "import { motion } from 'framer-motion';", color: colors.keyword },
+        { text: "", color: colors.text },
+        { text: "function Portfolio() {", color: colors.function },
+        { text: "  const [projects, setProjects] = useState([]);", color: colors.variable },
+        { text: "", color: colors.text },
+        { text: "  useEffect(() => {", color: colors.function },
+        { text: "    // Fetch projects data", color: colors.comment },
+        { text: "    fetchProjects().then(data => {", color: colors.function },
+        { text: "      setProjects(data);", color: colors.variable },
+        { text: "    });", color: colors.text },
+        { text: "  }, []);", color: colors.text },
+        { text: "", color: colors.text },
+        { text: "  return (", color: colors.keyword },
+        { text: '    <div className="portfolio">', color: colors.text },
+        { text: '      <Header title="Tushar Gupta" />', color: colors.function },
+        { text: "      <Hero />", color: colors.function },
+        { text: "      <Projects data={projects} />", color: colors.function },
+        { text: "      <Contact />", color: colors.function },
+        { text: "    </div>", color: colors.text },
+        { text: "  );", color: colors.text },
+        { text: "}", color: colors.function },
+        { text: "", color: colors.text },
+        { text: "export default Portfolio;", color: colors.keyword },
+      ]
+
+      // Animation variables
+      let currentLine = 0
+      let currentChar = 0
+      let cursorVisible = true
+      let lastTime = 0
+      let cursorBlinkTime = 0
+
+      // Draw code editor
+      const drawEditor = () => {
+        if (!ctx) return
+
+        // Get current dimensions
+        const width = canvas.width
+        const height = canvas.height
+
+        // Scale factors based on canvas size
+        const scaleFactor = width / 500 // Base scale on a 500px reference width
+        const lineHeight = 16 * scaleFactor
+        const startX = 40 * scaleFactor
+        const startY = 30 * scaleFactor
+        const tabSize = 20 * scaleFactor
+        const fontSize = 12 * scaleFactor
+
+        // Clear canvas
+        ctx.fillStyle = colors.background
+        ctx.fillRect(0, 0, width, height)
+
+        // Draw line numbers background
+        ctx.fillStyle = "#0a0f1c" // Even darker background for line numbers
+        ctx.fillRect(0, 0, startX - 10 * scaleFactor, height)
+
+        // Draw code lines
+        for (let i = 0; i < Math.min(currentLine + 1, codeLines.length); i++) {
+          // Safety check to prevent accessing beyond array bounds
+          if (i >= codeLines.length) continue
+
+          // Draw line number
+          ctx.fillStyle = "#64748b"
+          ctx.font = `${fontSize}px monospace`
+          ctx.textAlign = "right"
+          ctx.fillText(`${i + 1}`, startX - 15 * scaleFactor, startY + i * lineHeight)
+
+          // Draw code text
+          if (i < currentLine && i < codeLines.length) {
+            // Completed lines
+            ctx.fillStyle = codeLines[i].color
+            ctx.font = `${fontSize}px monospace`
+            ctx.textAlign = "left"
+
+            // Handle indentation
+            let indentLevel = 0
+            if (codeLines[i].text.startsWith("  ")) {
+              indentLevel = Math.floor(codeLines[i].text.match(/^\s+/)?.[0].length || 0) / 2
+            }
+
+            ctx.fillText(codeLines[i].text, startX + indentLevel * tabSize, startY + i * lineHeight)
+          } else if (i === currentLine && i < codeLines.length) {
+            // Current line (typing)
+            const currentText = codeLines[i].text.substring(0, currentChar)
+            ctx.fillStyle = codeLines[i].color
+            ctx.font = `${fontSize}px monospace`
+            ctx.textAlign = "left"
+
+            // Handle indentation
+            let indentLevel = 0
+            if (codeLines[i].text.startsWith("  ")) {
+              indentLevel = Math.floor(codeLines[i].text.match(/^\s+/)?.[0].length || 0) / 2
+            }
+
+            ctx.fillText(currentText, startX + indentLevel * tabSize, startY + i * lineHeight)
+
+            // Draw cursor
+            if (cursorVisible) {
+              const cursorX = startX + indentLevel * tabSize + ctx.measureText(currentText).width
+              ctx.fillStyle = colors.cursor
+              ctx.fillRect(cursorX, startY + i * lineHeight - lineHeight + 3 * scaleFactor, 2 * scaleFactor, lineHeight)
+            }
+          }
+        }
+      }
+
+      // Animation loop using requestAnimationFrame instead of setInterval
+      const animate = (time: number) => {
+        if (!isAnimating) return
+
+        // Calculate delta time
+        const deltaTime = time - lastTime
+        lastTime = time
+
+        // Handle cursor blinking
+        cursorBlinkTime += deltaTime
+        if (cursorBlinkTime > 500) {
+          cursorVisible = !cursorVisible
+          cursorBlinkTime = 0
+        }
+
+        // Typing speed control (ms delay between chars)
+        const charDelay = 7 // lower = faster
+
+        let timeSinceLastChar = 0
+
+        // Inside animate function:
+        timeSinceLastChar += deltaTime
+        if (timeSinceLastChar > charDelay) {
+          if (currentLine < codeLines.length) {
+            if (currentChar < codeLines[currentLine].text.length) {
+              currentChar++
+            } else {
+              currentLine++
+              currentChar = 0
+            }
+          } else {
+            currentLine = 0
+            currentChar = 0
+          }
+          timeSinceLastChar = 0
+        }
+
+
+
+        drawEditor()
+        requestAnimationFrame(animate)
+      }
+
+      // Start animation
+      drawEditor()
+      requestAnimationFrame(animate)
+
+      // Cleanup
+      return () => {
+        setIsAnimating(false)
+        window.removeEventListener("resize", updateCanvasSize)
+      }
+    }, [isAnimating])
+
+    return (
+      <div className="relative w-full mx-auto">
+        <div className="absolute top-0 left-0 right-0 h-8 bg-slate-800 rounded-t-lg flex items-center px-4">
+          <div className="flex space-x-2">
+            <div className="w-3 h-3 rounded-full bg-red-500"></div>
+            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+            <div className="w-3 h-3 rounded-full bg-green-500"></div>
+          </div>
+          <div className="text-xs text-slate-400 mx-auto">portfolio.tsx</div>
         </div>
+        <canvas
+          ref={canvasRef}
+          className="rounded-lg shadow-2xl border border-slate-700 w-full pt-4 pl-0 "
+          style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}
+        />
+      </div>
+    )
+  }
+
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0f172a] text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-[#0f172a]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+        <div className="container mx-auto px-4 flex justify-between items-center h-16">
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-400 to-indigo-500 flex items-center justify-center text-white font-bold">
+              TN
+            </div>
+            <span className="font-bold text-xl hidden sm:block">TuNombre</span>
+          </div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                className={`px-4 py-2 rounded-md transition-colors ${activeSection === item.id
+                  ? "bg-gray-100 dark:bg-gray-800 text-teal-500 dark:text-teal-400"
+                  : "hover:bg-gray-100 dark:hover:bg-gray-800/50"
+                  }`}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" onClick={() => setDarkMode(!darkMode)} className="rounded-full">
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden rounded-full"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </Button>
+
+            <Button className="hidden md:flex bg-gradient-to-r from-teal-500 to-indigo-500 hover:from-teal-600 hover:to-indigo-600 text-white border-0">
+              Contact
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed inset-0 z-40 bg-white dark:bg-[#0f172a] pt-16"
+          >
+            <nav className="container mx-auto px-4 py-8 flex flex-col gap-4">
+              {navItems.map((item) => (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-gray-800"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-md bg-gray-100 dark:bg-gray-800">{item.icon}</div>
+                    <span className="font-medium">{item.label}</span>
+                  </div>
+                  <ChevronRight size={20} className="text-gray-400" />
+                </a>
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Main Content */}
+      <main className="pt-16">
+        {/* Hero Section */}
+        <section id="home" className="min-h-screen flex items-center py-20">
+          <div className="container mx-auto px-4">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className="order-2 md:order-1 z-10"
+              >
+                <Badge className="mb-4 bg-teal-500/10 text-teal-500 dark:bg-teal-400/10 dark:text-teal-400 hover:bg-teal-500/20 dark:hover:bg-teal-400/20">
+                  Backend Developer
+                </Badge>
+                <h1 className="text-4xl md:text-6xl font-bold mb-4">
+                  Hello, I'm{" "}
+                  <span className="bg-gradient-to-r from-teal-500 to-indigo-500 bg-clip-text text-transparent">
+                    Tushar Gupta
+                  </span>
+                </h1>
+                <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+                  Passionate backend developer focused on building
+                  <FlipWords words={words} /> <br />
+                  systems.
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  <Button className="bg-gradient-to-r from-teal-500 to-indigo-500 hover:from-teal-600 hover:to-indigo-600 text-white border-0">
+                    View Projects <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                  {/* <Button variant="outline" className="border-gray-300 dark:border-gray-700">
+                    Descargar CV
+                  </Button> */}
+                </div>
+
+                <div className="mt-12 flex gap-4">
+                  <a
+                    href="https://github.com/tushar21014"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:text-teal-500 dark:hover:text-teal-400 transition-colors cursor-pointer"
+                  >
+                    <Github size={20} />
+                  </a>
+                  <a
+                    href="https://leetcode.com/u/Tushar21014/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:text-teal-500 dark:hover:text-teal-400 transition-colors cursor-pointer"
+                  >
+                    <Code size={20} />
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/tushar-gupta-5666ba23b"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:text-teal-500 dark:hover:text-teal-400 transition-colors cursor-pointer"
+                  >
+                    <Linkedin size={20} />
+                  </a>
+                  <a
+                    href="mailto:tg21014@gmail.com"
+                    className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:text-teal-500 dark:hover:text-teal-400 transition-colors cursor-pointer"
+                  >
+                    <Mail size={20} />
+                  </a>
+                </div>
+
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="order-1 md:order-2 flex justify-center"
+              >
+                {/* Text content */}
+
+                {/* Code Editor Animation */}
+                <motion.div
+                  style={{ height: '60vh', width: '30vw', padding: '0px' }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                >
+                  <CodeEditorAnimation />
+                </motion.div>
+              </motion.div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* About Section */}
+
+        <section id="about" className="py-20 bg-gray-100 dark:bg-gray-900/50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <Badge className="mb-4 bg-teal-500/10 text-teal-500 dark:bg-teal-400/10 dark:text-teal-400">
+                About Me
+              </Badge>
+              <h2 className="text-3xl font-bold mb-4">Get to know me better</h2>
+              <p className="text-gray-600 dark:text-gray-300">
+                I am a backend web developer with a passion for learning new technologies and creating innovative solutions.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <h3 className="text-2xl font-semibold mb-4">My Story</h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-6">
+                  I'm a AWS Certified backend developer with a passion for learning new technologies and creating scalable and innovative solutions.
+                  My goal is to develop scalable and
+                  efficient programs to create exceptional user experiences.
+                </p>
+                <p className="text-gray-600 dark:text-gray-300 mb-6">
+                  I'm a java developer but I have experience with Node.js and databases. I love competitive programming and collaborating with different teams.
+                </p>
+
+                <div className="grid grid-cols-2 gap-4 mt-8">
+                  <div className="p-4 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
+                    <div className="text-3xl font-bold text-teal-500 dark:text-teal-400 mb-1">300+</div>
+                    <div className="text-gray-600 dark:text-gray-300">Questions Solved on Leetcode</div>
+                  </div>
+                  <div className="p-4 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
+                    <div className="text-3xl font-bold text-indigo-500 dark:text-indigo-400 mb-1">10+</div>
+                    <div className="text-gray-600 dark:text-gray-300">Projects Completed</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-2xl font-semibold mb-6">Skills</h3>
+                <Tabs defaultValue="Frontend" className="w-full">
+                  <TabsList className="grid grid-cols-3 mb-6">
+                    {skills.map((skill) => (
+                      <TabsTrigger key={skill.category} value={skill.category}>
+                        {skill.category}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+
+                  {skills.map((skill) => (
+                    <TabsContent key={skill.category} value={skill.category} className="mt-0">
+                      <HoverEffect
+                        items={skill.items.map((item) => ({
+                          title: item,
+                        }))}
+                      />
+                    </TabsContent>
+                  ))}
+                </Tabs>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* Projects Section */}
+        <section id="projects" className="py-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <Badge className="mb-4 bg-teal-500/10 text-teal-500 dark:bg-teal-400/10 dark:text-teal-400">
+                Projects
+              </Badge>
+              <h2 className="text-3xl font-bold mb-4">My recent work</h2>
+              <p className="text-gray-600 dark:text-gray-300">
+                Aquí hay una selección de proyectos en los que he trabajado recientemente.
+              </p>
+            </div>
+
+            <GlowingEffectDemo />
+            {/* <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projects.map((project, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <Card className="overflow-hidden h-full bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                    <div className="relative">
+                      <img
+                        src={project.image || "/placeholder.svg"}
+                        alt={project.title}
+                        className="w-full h-48 object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end justify-between p-4">
+                        <div className="flex gap-3">
+                          <a
+                            href={project.github}
+                            className="p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors"
+                          >
+                            <Github size={18} className="text-white" />
+                          </a>
+                          <a
+                            href={project.demo}
+                            className="p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors"
+                          >
+                            <ExternalLink size={18} className="text-white" />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <CardContent className="p-6">
+                      <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                      <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {project.technologies.map((tech) => (
+                          <Badge
+                            key={tech}
+                            variant="outline"
+                            className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border-0"
+                          >
+                            {tech}
+                          </Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div> */}
+
+            <div className="text-center mt-12">
+              <Button variant="outline" className="border-gray-300 dark:border-gray-700">
+                View My Projects
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Education Section */}
+        <section id="education" className="py-20 bg-gray-100 dark:bg-gray-900/50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <Badge className="mb-4 bg-teal-500/10 text-teal-500 dark:bg-teal-400/10 dark:text-teal-400">
+                Educación
+              </Badge>
+              <h2 className="text-3xl font-bold mb-4">Mi formación académica</h2>
+              <p className="text-gray-600 dark:text-gray-300">Mi trayectoria educativa y formación profesional.</p>
+            </div>
+
+            <div className="max-w-4xl mx-auto">
+              {education.map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="flex gap-6 mb-12 last:mb-0"
+                >
+                  <div className="hidden sm:block pt-1">
+                    <div className="w-12 h-12 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center shadow-sm">
+                      <div className="w-3 h-3 rounded-full bg-gradient-to-r from-teal-500 to-indigo-500"></div>
+                    </div>
+                    {index !== education.length - 1 && (
+                      <div className="w-0.5 h-full bg-gray-200 dark:bg-gray-700 ml-6 mt-2"></div>
+                    )}
+                  </div>
+
+                  <Card className="flex-1 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+                    <CardContent className="p-6">
+                      <Badge className="mb-2 bg-indigo-500/10 text-indigo-500 dark:bg-indigo-400/10 dark:text-indigo-400">
+                        {item.period}
+                      </Badge>
+                      <h3 className="text-xl font-semibold mb-1">{item.title}</h3>
+                      <p className="text-gray-500 dark:text-gray-400 mb-4">{item.institution}</p>
+                      <p className="text-gray-600 dark:text-gray-300">{item.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section id="contact" className="py-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <Badge className="mb-4 bg-teal-500/10 text-teal-500 dark:bg-teal-400/10 dark:text-teal-400">
+                Contact
+              </Badge>
+              <h2 className="text-3xl font-bold mb-4">Talk Later?</h2>
+              <p className="text-gray-600 dark:text-gray-300">
+                Interested in working together or have any questions?
+              </p>
+            </div>
+
+            <div className="max-w-5xl mx-auto">
+              <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 overflow-hidden p-0">
+                <div className="grid md:grid-cols-5">
+                  <div className="md:col-span-2 bg-gradient-to-br from-teal-500 to-indigo-500 p-8 text-white">
+                    <h3 className="text-2xl font-semibold mb-6">Contact information</h3>
+                    <p className="mb-8 opacity-90">
+                      Fill out the form and I'll get back to you as soon as possible.
+                    </p>
+
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-4">
+                        <div className="p-2 rounded-full bg-white/20">
+                          <Mail size={20} />
+                        </div>
+                        <span>tg21014@gmail.com</span>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="p-2 rounded-full bg-white/20">
+                          <Github size={20} />
+                        </div>
+                        <span>github.com/tushar21014</span>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="p-2 rounded-full bg-white/20">
+                          <Linkedin size={20} />
+                        </div>
+                        <span>linkedin.com/in/tushar-gupta-5666ba23b</span>
+                      </div>
+                    </div>
+
+                    <div className="absolute bottom-8 left-8 right-8 opacity-10">
+                      <Code size={180} />
+                    </div>
+                  </div>
+
+                  <div className="md:col-span-3 p-8 z-10">
+                    <form className="space-y-6">
+                      <div className="grid grid-cols-2 gap-6">
+                        <div>
+                          <label
+                            htmlFor="name"
+                            className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300"
+                          >
+                            Name
+                          </label>
+                          <input
+                            type="text"
+                            id="name"
+                            className="w-full z-10 px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400"
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="email"
+                            className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300"
+                          >
+                            Email
+                          </label>
+                          <input
+                            type="email"
+                            id="email"
+                            className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="subject"
+                          className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300"
+                        >
+                          Reason
+                        </label>
+                        <input
+                          type="text"
+                          id="subject"
+                          className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400"
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="message"
+                          className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300"
+                        >
+                          Message
+                        </label>
+                        <textarea
+                          id="message"
+                          rows={5}
+                          className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400"
+                        />
+                      </div>
+                      <Button className="w-full bg-gradient-to-r from-teal-500 to-indigo-500 hover:from-teal-600 hover:to-indigo-600 text-white border-0">
+                        Send Message
+                      </Button>
+                    </form>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer */}
+      <footer className="py-8 border-t border-gray-200 dark:border-gray-800">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center gap-2 mb-4 md:mb-0">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-indigo-500 flex items-center justify-center text-white font-bold text-xs">
+                TN
+              </div>
+              <span className="font-bold">TuNombre</span>
+            </div>
+
+            <div className="text-gray-500 dark:text-gray-400 text-sm">
+              © {new Date().getFullYear()} TuNombre. Todos los derechos reservados.
+            </div>
+
+            <div className="flex gap-4 mt-4 md:mt-0">
+              <a
+                href="https://github.com/tushar21014"
+                target="_blank"
+                className="text-gray-500 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+              >
+                <Github size={18} />
+              </a>
+              <a
+                href="www.linkedin.com/in/tushar-gupta-5666ba23b"
+                className="text-gray-500 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+                target="_blank"
+              >
+                <Linkedin size={18} />
+              </a>
+              <a
+                href="mailto:tg21014@gmail.com"
+                className="text-gray-500 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+                target="_blank"
+              >
+                <Mail size={18} />
+              </a>
+              <a
+                href="https://leetcode.com/u/Tushar21014/"
+                className="text-gray-500 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+                target="_blank"
+              >
+                <Code size={18} />
+              </a>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
-  );
+  )
 }
