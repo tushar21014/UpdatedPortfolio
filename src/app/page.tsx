@@ -703,7 +703,7 @@ export default function PortfolioV2() {
                   <div className="md:col-span-2 bg-gradient-to-br from-teal-500 to-indigo-500 p-8 text-white">
                     <h3 className="text-2xl font-semibold mb-6">Contact information</h3>
                     <p className="mb-8 opacity-90">
-                      Fill out the form and I'll get back to you as soon as possible.
+                      Fill out the form and I&apos;ll get back to you as soon as possible.
                     </p>
 
                     <div className="space-y-6">
