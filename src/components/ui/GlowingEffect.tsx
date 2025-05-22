@@ -4,32 +4,32 @@ import { Box, Lock, Search, Settings, Sparkles,ExternalLink, Github,} from "luci
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { LinkPreview } from "@/components/ui/link-preview";
 
-const projects = [
-    {
-      title: "CrowdSourced",
-      description: "A decentralized platform for sharing and monetizing user-generated content.",
-      technologies: ["React", "Node.js", "MongoDB", "Blockchain", "AWS"],
-      image: "https://media.licdn.com/dms/image/v2/D5622AQGkUQ90GCFy2g/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1727068857774?e=1750896000&v=beta&t=dYmWbWEvu47Hv658TUbHvEGrx0mtY3Jw1CO71PyUFMs",
-      github: "https://github.com/tushar21014/Crowdsourced",
-      demo: "#",
-    },
-    {
-      title: "CodeArena",
-      description: "1v1 friendly coding battles solving DSA questions in real-time.",
-      technologies: ["Node", "WebSockets", "MongoDB", "Express"],
-      image: "/placeholder.svg?height=200&width=350",
-      github: "#",
-      demo: "#",
-    },
-    {
-      title: "AI Email Scheduler",
-      description: "Automates bulk emails scheduling with different formats and attachments.",
-      technologies: ["React", "Node", "AWS", "Gmail API"],
-      image: "https://private-user-images.githubusercontent.com/62438087/445764811-a023ab3d-35e3-4733-bdc2-bbbb4087960d.png",
-      github: "https://github.com/tushar21014/mailingsystem",
-      demo: "https://www.linkedin.com/posts/tushar-gupta-5666ba23b_react-nodejs-express-activity-7219200218557239297-YeTo?utm_source=share&utm_medium=member_desktop&rcm=ACoAADu5-Z4BgrjcE9I7wmIiHUJjNzrJf7GAjHM",
-    },
-  ];
+// const projects = [
+//     {
+//       title: "CrowdSourced",
+//       description: "A decentralized platform for sharing and monetizing user-generated content.",
+//       technologies: ["React", "Node.js", "MongoDB", "Blockchain", "AWS"],
+//       image: "https://media.licdn.com/dms/image/v2/D5622AQGkUQ90GCFy2g/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1727068857774?e=1750896000&v=beta&t=dYmWbWEvu47Hv658TUbHvEGrx0mtY3Jw1CO71PyUFMs",
+//       github: "https://github.com/tushar21014/Crowdsourced",
+//       demo: "#",
+//     },
+//     {
+//       title: "CodeArena",
+//       description: "1v1 friendly coding battles solving DSA questions in real-time.",
+//       technologies: ["Node", "WebSockets", "MongoDB", "Express"],
+//       image: "/placeholder.svg?height=200&width=350",
+//       github: "#",
+//       demo: "#",
+//     },
+//     {
+//       title: "AI Email Scheduler",
+//       description: "Automates bulk emails scheduling with different formats and attachments.",
+//       technologies: ["React", "Node", "AWS", "Gmail API"],
+//       image: "https://private-user-images.githubusercontent.com/62438087/445764811-a023ab3d-35e3-4733-bdc2-bbbb4087960d.png",
+//       github: "https://github.com/tushar21014/mailingsystem",
+//       demo: "https://www.linkedin.com/posts/tushar-gupta-5666ba23b_react-nodejs-express-activity-7219200218557239297-YeTo?utm_source=share&utm_medium=member_desktop&rcm=ACoAADu5-Z4BgrjcE9I7wmIiHUJjNzrJf7GAjHM",
+//     },
+//   ];
 export function GlowingEffectDemo() {
   return (
     <ul className="grid grid-cols-1 grid-rows-none gap-4 md:grid-cols-12 md:grid-rows-3 lg:gap-4 xl:max-h-[34rem] xl:grid-rows-2">

@@ -10,7 +10,6 @@ import {
   Mail,
   Github,
   Linkedin,
-  ExternalLink,
   ChevronRight,
   Menu,
   X,
@@ -26,7 +25,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { HoverEffect } from "@/components/ui/card-hover"
 import { FlipWords } from "@/components/flip-words"
 import { GlowingEffectDemo } from "@/components/ui/GlowingEffect"
-import Hero from "@/components/ui/Hero"
 
 export default function PortfolioV2() {
   const [activeSection, setActiveSection] = useState("home")
@@ -423,7 +421,7 @@ export default function PortfolioV2() {
                   Backend Developer
                 </Badge>
                 <h1 className="text-4xl md:text-6xl font-bold mb-4">
-                  Hello, I'm{" "}
+                  Hello, I &apos; m{" "}
                   <span className="bg-gradient-to-r from-teal-500 to-indigo-500 bg-clip-text text-transparent">
                     Tushar Gupta
                   </span>
@@ -518,12 +516,12 @@ export default function PortfolioV2() {
               <div>
                 <h3 className="text-2xl font-semibold mb-4">My Story</h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-6">
-                  I'm a AWS Certified backend developer with a passion for learning new technologies and creating scalable and innovative solutions.
+                  I &apos; m a AWS Certified backend developer with a passion for learning new technologies and creating scalable and innovative solutions.
                   My goal is to develop scalable and
                   efficient programs to create exceptional user experiences.
                 </p>
                 <p className="text-gray-600 dark:text-gray-300 mb-6">
-                  I'm a java developer but I have experience with Node.js and databases. I love competitive programming and collaborating with different teams.
+                  I &apos; m a java developer but I have experience with Node.js and databases. I love competitive programming and collaborating with different teams.
                 </p>
 
                 <div className="grid grid-cols-2 gap-4 mt-8">
