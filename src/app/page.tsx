@@ -25,11 +25,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { HoverEffect } from "@/components/ui/card-hover"
 import { FlipWords } from "@/components/flip-words"
 import { GlowingEffectDemo } from "@/components/ui/GlowingEffect"
+import LoadingScreen from "@/components/ui/loading-screen"
 
 export default function PortfolioV2() {
   const [activeSection, setActiveSection] = useState("home")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [darkMode, setDarkMode] = useState(true)
+
+  const [isLoading, setIsLoading] = useState(true)
 
   // Cambiar tema claro/oscuro
   useEffect(() => {
@@ -39,6 +42,13 @@ export default function PortfolioV2() {
       document.documentElement.classList.remove("dark")
     }
   }, [darkMode])
+
+  useEffect(() => {
+    window.addEventListener("load", () => {
+      setIsLoading(false)
+    })
+  }, [])
+
 
   // Cambiar sección activa basado en scroll
   useEffect(() => {
@@ -79,22 +89,37 @@ export default function PortfolioV2() {
   const education = [
     {
       period: "2021 - 2024",
-      title: "Grado en ",
+      title: "Bachelor of Computer Applications",
       institution: "Institute Of Information Management And Technology",
       description: "Estudios centrados en desarrollo web, programación y diseño de interfaces.",
     },
     {
-      period: "2023",
-      title: "Bootcamp de Desarrollo Frontend",
-      institution: "Academia Código",
+      period: "2024 - 2026",
+      title: "Master of Computer Applications",
+      institution: "Vivekananda Institute Of Professional Studies",
       description: "Formación intensiva en React, JavaScript moderno y desarrollo de aplicaciones web.",
     },
+    // {
+    //   period: "En curso",
+    //   title: "Certificación en UX/UI Design",
+    //   institution: "Plataforma Online",
+    //   description: "Aprendiendo principios de diseño de experiencia de usuario e interfaces.",
+    // },
+  ]
+
+  const internships = [
     {
-      period: "En curso",
-      title: "Certificación en UX/UI Design",
-      institution: "Plataforma Online",
-      description: "Aprendiendo principios de diseño de experiencia de usuario e interfaces.",
+      period: "2023",
+      title: "Application Developer Intern",
+      company: "C-DAC",
+      description: "Developed 2 Full Stack Projects using Node, SQL, and React. ",
     },
+    {
+      period: "2023",
+      title: "Technical Head",
+      company: "Clique Events",
+      description: "Led a team of developers to create a web application for event management."
+    }
   ]
 
   const CodeEditorAnimation = () => {
@@ -334,9 +359,9 @@ export default function PortfolioV2() {
         <div className="container mx-auto px-4 flex justify-between items-center h-16">
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-400 to-indigo-500 flex items-center justify-center text-white font-bold">
-              TN
+              TG
             </div>
-            <span className="font-bold text-xl hidden sm:block">TuNombre</span>
+            {/* <span className="font-bold text-xl hidden sm:block">Tushar Gupta</span> */}
           </div>
 
           {/* Desktop Navigation */}
@@ -406,7 +431,10 @@ export default function PortfolioV2() {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className="pt-16">
+      <main className="pt-16 max-w-[85%] mx-auto">
+
+        {isLoading && <LoadingScreen />}
+
         {/* Hero Section */}
         <section id="home" className="min-h-screen flex items-center py-20">
           <div className="container mx-auto px-4">
@@ -421,7 +449,7 @@ export default function PortfolioV2() {
                   Backend Developer
                 </Badge>
                 <h1 className="text-4xl md:text-6xl font-bold mb-4">
-                  Hello, I &apos; m{" "}
+                  Hello, I&apos;m{" "}
                   <span className="bg-gradient-to-r from-teal-500 to-indigo-500 bg-clip-text text-transparent">
                     Tushar Gupta
                   </span>
@@ -479,7 +507,7 @@ export default function PortfolioV2() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="order-1 md:order-2 flex justify-center"
+                className="order-1 md:order-2 justify-center hidden md:flex"
               >
                 {/* Text content */}
 
@@ -507,7 +535,7 @@ export default function PortfolioV2() {
                 About Me
               </Badge>
               <h2 className="text-3xl font-bold mb-4">Get to know me better</h2>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-gray-600 dark:text-gray-300 hidden sm:block">
                 I am a backend web developer with a passion for learning new technologies and creating innovative solutions.
               </p>
             </div>
@@ -515,22 +543,22 @@ export default function PortfolioV2() {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
                 <h3 className="text-2xl font-semibold mb-4">My Story</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-6">
-                  I &apos; m a AWS Certified backend developer with a passion for learning new technologies and creating scalable and innovative solutions.
+                <p className="text-gray-600 dark:text-gray-300 mb-6 z-10">
+                  I&apos;m a AWS Certified backend developer with a passion for learning new technologies and creating scalable and innovative solutions.
                   My goal is to develop scalable and
                   efficient programs to create exceptional user experiences.
                 </p>
                 <p className="text-gray-600 dark:text-gray-300 mb-6">
-                  I &apos; m a java developer but I have experience with Node.js and databases. I love competitive programming and collaborating with different teams.
+                  I&apos;m a java developer but I have experience with Node.js and databases. I love competitive programming and collaborating with different teams.
                 </p>
 
                 <div className="grid grid-cols-2 gap-4 mt-8">
-                  <div className="p-4 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
+                  <div className="p-4 rounded-lg bg-white dark:bg-gray-800 shadow-sm z-10">
                     <div className="text-3xl font-bold text-teal-500 dark:text-teal-400 mb-1">300+</div>
                     <div className="text-gray-600 dark:text-gray-300">Questions Solved on Leetcode</div>
                   </div>
-                  <div className="p-4 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
-                    <div className="text-3xl font-bold text-indigo-500 dark:text-indigo-400 mb-1">10+</div>
+                  <div className="p-4 rounded-lg bg-white dark:bg-gray-800 shadow-sm z-10">
+                    <div className="text-3xl font-bold text-indigo-500 dark:text-indigo-400 mb-1 z-10">10+</div>
                     <div className="text-gray-600 dark:text-gray-300">Projects Completed</div>
                   </div>
                 </div>
@@ -538,7 +566,7 @@ export default function PortfolioV2() {
 
               <div>
                 <h3 className="text-2xl font-semibold mb-6">Skills</h3>
-                <Tabs defaultValue="Frontend" className="w-full">
+                <Tabs defaultValue="Backend" className="w-full">
                   <TabsList className="grid grid-cols-3 mb-6">
                     {skills.map((skill) => (
                       <TabsTrigger key={skill.category} value={skill.category}>
@@ -643,10 +671,11 @@ export default function PortfolioV2() {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center mb-16">
               <Badge className="mb-4 bg-teal-500/10 text-teal-500 dark:bg-teal-400/10 dark:text-teal-400">
-                Educación
+                Education
               </Badge>
-              <h2 className="text-3xl font-bold mb-4">Mi formación académica</h2>
-              <p className="text-gray-600 dark:text-gray-300">Mi trayectoria educativa y formación profesional.</p>
+              <h2 className="text-3xl font-bold mb-4">My academic training</h2>
+              <p className="text-gray-600 dark:text-gray-300">My educational background and professional training.</p>
+
             </div>
 
             <div className="max-w-4xl mx-auto">
@@ -668,18 +697,60 @@ export default function PortfolioV2() {
                     )}
                   </div>
 
-                  <Card className="flex-1 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-                    <CardContent className="p-6">
-                      <Badge className="mb-2 bg-indigo-500/10 text-indigo-500 dark:bg-indigo-400/10 dark:text-indigo-400">
-                        {item.period}
-                      </Badge>
-                      <h3 className="text-xl font-semibold mb-1">{item.title}</h3>
-                      <p className="text-gray-500 dark:text-gray-400 mb-4">{item.institution}</p>
-                      <p className="text-gray-600 dark:text-gray-300">{item.description}</p>
-                    </CardContent>
-                  </Card>
+                  <div className="flex flex-col">
+
+                    <Card className="flex-1 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+                      <CardContent className="p-6">
+                        <Badge className="mb-2 bg-indigo-500/10 text-indigo-500 dark:bg-indigo-400/10 dark:text-indigo-400">
+                          {item.period}
+
+                        </Badge>
+
+                        <h3 className="text-xl font-semibold mb-1">{item.title}</h3>
+                        <p className="text-gray-500 dark:text-gray-400 mb-4">{item.institution}</p>
+                        <p className="text-gray-600 dark:text-gray-300">{item.description}</p>
+                      </CardContent>
+
+                    </Card>
+
+                    {/* <div className="hidden sm:block pt-1">
+                    <div className="w-12 h-12 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center shadow-sm">
+                      <div className="w-3 h-3 rounded-full bg-gradient-to-r from-teal-500 to-indigo-500"></div>
+                    </div>
+                    {index !== education.length - 1 && (
+                      <div className="w-0.5 h-full bg-gray-200 dark:bg-gray-700 ml-6 mt-2"></div>
+                    )}
+                  </div> */}
+                    {index !== 1 && internships.map((internship, subIndex) => (
+                      <div key={subIndex} className="flex gap-6 mb-12 last:mb-0">
+                        <div className="hidden sm:block pt-1 mt-20">
+                          <div className="w-12 h-12 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center shadow-sm">
+                            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-teal-500 to-indigo-500"></div>
+                          </div>
+                          {subIndex !== internships.length - 1 && (
+                            <div className="w-0.5 h-[20%] absolute bg-gray-200 dark:bg-gray-700 ml-6 mt-2"></div>
+                          )}
+                        </div>
+
+                        <Card className="flex-1 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 mt-10">
+                          <CardContent className="p-6">
+                            <Badge className="mb-2 bg-indigo-500/10 text-indigo-500 dark:bg-indigo-400/10 dark:text-indigo-400">
+                              {internship.period}
+                            </Badge>
+                            <h3 className="text-xl font-semibold mb-1">{internship.title}</h3>
+                            <p className="text-gray-500 dark:text-gray-400 mb-4">{internship.company}</p>
+                            <p className="text-gray-600 dark:text-gray-300">{internship.description}</p>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    ))}
+
+                  </div>
+
                 </motion.div>
               ))}
+
+
             </div>
           </div>
         </section>
@@ -806,13 +877,13 @@ export default function PortfolioV2() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-2 mb-4 md:mb-0">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-indigo-500 flex items-center justify-center text-white font-bold text-xs">
-                TN
+                TG
               </div>
-              <span className="font-bold">TuNombre</span>
+              <span className="font-bold">Tushar Gupta</span>
             </div>
 
             <div className="text-gray-500 dark:text-gray-400 text-sm">
-              © {new Date().getFullYear()} TuNombre. Todos los derechos reservados.
+              © {new Date().getFullYear()} Tushar Gupta. All rights reserved.
             </div>
 
             <div className="flex gap-4 mt-4 md:mt-0">
@@ -824,7 +895,7 @@ export default function PortfolioV2() {
                 <Github size={18} />
               </a>
               <a
-                href="www.linkedin.com/in/tushar-gupta-5666ba23b"
+                href="https://www.linkedin.com/in/tushar-gupta-5666ba23b/"
                 className="text-gray-500 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
                 target="_blank"
               >
