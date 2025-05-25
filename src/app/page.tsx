@@ -14,10 +14,7 @@ import {
   Menu,
   X,
   ArrowRight,
-  Moon,
-  Sun,
 } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -26,18 +23,22 @@ import { HoverEffect } from "@/components/ui/card-hover"
 import { FlipWords } from "@/components/flip-words"
 import { GlowingEffectDemo } from "@/components/ui/GlowingEffect"
 import LoadingScreen from "@/components/ui/loading-screen"
+import Link from "next/link"
+import toast, { Toaster } from 'react-hot-toast';
+import dotenv from "dotenv";
+dotenv.config();
 
 export default function PortfolioV2() {
   const [activeSection, setActiveSection] = useState("home")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [darkMode, setDarkMode] = useState(true)
-
+  const darkMode = true
   const [isLoading, setIsLoading] = useState(true)
 
   // Cambiar tema claro/oscuro
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark")
+      // console.log(process.env.NEXT_PUBLIC_BACKEND_URL)
     } else {
       document.documentElement.classList.remove("dark")
     }
@@ -91,13 +92,13 @@ export default function PortfolioV2() {
       period: "2021 - 2024",
       title: "Bachelor of Computer Applications",
       institution: "Institute Of Information Management And Technology",
-      description: "Estudios centrados en desarrollo web, programación y diseño de interfaces.",
+      description: "Built a strong foundation in programming, web development, software engineering, and cloud technologies.",
     },
     {
       period: "2024 - 2026",
       title: "Master of Computer Applications",
       institution: "Vivekananda Institute Of Professional Studies",
-      description: "Formación intensiva en React, JavaScript moderno y desarrollo de aplicaciones web.",
+      description: "Expertising in software development, system design, and emerging cloud and backend technologies.",
     },
     // {
     //   period: "En curso",
@@ -122,6 +123,52 @@ export default function PortfolioV2() {
     }
   ]
 
+
+  
+  interface ContactFormData {
+    name: string;
+    email: string;
+    reason: string;
+    message: string;
+  }
+
+  const handleSubmit = async ({ name, email, reason, message }: ContactFormData) => {
+    const submissionPromise = fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/contact`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        reason,
+        message,
+      }),
+    }).then(async (response) => {
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Something went wrong!");
+      }
+      return await response.text();
+    });
+  
+    await toast.promise(
+      submissionPromise,
+      {
+        loading: "Submitting your query...",
+        success: "Query sent successfully!",
+        error: (err) => err.message || "Something went wrong!",
+      },
+      {
+        success: { duration: 4000 },
+        error: { duration: 4000 },
+      }
+    );
+  
+    return submissionPromise;
+  };
+  
+  
   const CodeEditorAnimation = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const [isAnimating, setIsAnimating] = useState(true)
@@ -354,6 +401,8 @@ export default function PortfolioV2() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0f172a] text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+            <Toaster />
+
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-[#0f172a]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4 flex justify-between items-center h-16">
@@ -381,9 +430,9 @@ export default function PortfolioV2() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={() => setDarkMode(!darkMode)} className="rounded-full">
+            {/* <Button variant="ghost" size="icon" onClick={() => setDarkMode(!darkMode)} className="rounded-full">
               {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-            </Button>
+            </Button> */}
 
             <Button
               variant="ghost"
@@ -394,9 +443,12 @@ export default function PortfolioV2() {
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </Button>
 
-            <Button className="hidden md:flex bg-gradient-to-r from-teal-500 to-indigo-500 hover:from-teal-600 hover:to-indigo-600 text-white border-0">
+            {/* <a href="#contact">
+
+            <Button className="hidden md:flex bg-gradient-to-r from-teal-500 to-indigo-500 hover:from-teal-600 hover:to-indigo-600 text-white border-0 cursor-pointer">
               Contact
             </Button>
+            </a> */}
           </div>
         </div>
       </header>
@@ -460,9 +512,11 @@ export default function PortfolioV2() {
                   systems.
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <Button className="bg-gradient-to-r from-teal-500 to-indigo-500 hover:from-teal-600 hover:to-indigo-600 text-white border-0">
+                  <a href="https://github.com/tushar21014" target="_blank" rel="noopener noreferrer">
+                  <Button className="bg-gradient-to-r from-teal-500 to-indigo-500 hover:from-teal-600 hover:to-indigo-600 text-white border-0 cursor-pointer">
                     View Projects <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
+                  </a>
                   {/* <Button variant="outline" className="border-gray-300 dark:border-gray-700">
                     Descargar CV
                   </Button> */}
@@ -600,8 +654,7 @@ export default function PortfolioV2() {
               </Badge>
               <h2 className="text-3xl font-bold mb-4">My recent work</h2>
               <p className="text-gray-600 dark:text-gray-300">
-                Aquí hay una selección de proyectos en los que he trabajado recientemente.
-              </p>
+              Here is a selection of projects I have worked on recently.</p>
             </div>
 
             <GlowingEffectDemo />
@@ -659,9 +712,11 @@ export default function PortfolioV2() {
             </div> */}
 
             <div className="text-center mt-12">
-              <Button variant="outline" className="border-gray-300 dark:border-gray-700">
+              <a href="https://github.com/tushar21014" target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" className="border-gray-300 dark:border-gray-700 cursor-pointer">
                 View My Projects
               </Button>
+              </a>
             </div>
           </div>
         </section>
@@ -728,7 +783,7 @@ export default function PortfolioV2() {
                             <div className="w-3 h-3 rounded-full bg-gradient-to-r from-teal-500 to-indigo-500"></div>
                           </div>
                           {subIndex !== internships.length - 1 && (
-                            <div className="w-0.5 h-[20%] absolute bg-gray-200 dark:bg-gray-700 ml-6 mt-2"></div>
+                            <div className="w-0.5 h-[27%] absolute bg-gray-200 dark:bg-gray-700 ml-6 mt-2"></div>
                           )}
                         </div>
 
@@ -782,22 +837,41 @@ export default function PortfolioV2() {
                         <div className="p-2 rounded-full bg-white/20">
                           <Mail size={20} />
                         </div>
-                        <span>tg21014@gmail.com</span>
+                        <Link
+                          href="mailto:tg21014@gmail.com"
+                          className="text-white"
+                        >
+                          tg21014@gmail.com
+                        </Link>
                       </div>
+
                       <div className="flex items-center gap-4">
                         <div className="p-2 rounded-full bg-white/20">
                           <Github size={20} />
                         </div>
-                        <span>github.com/tushar21014</span>
+                        <Link
+                          href="https://github.com/tushar21014"
+                          target="_blank"
+                          className="text-white"
+                        >
+                          github.com/tushar21014
+                        </Link>
                       </div>
+
                       <div className="flex items-center gap-4">
                         <div className="p-2 rounded-full bg-white/20">
                           <Linkedin size={20} />
                         </div>
-                        <span>linkedin.com/in/tushar-gupta-5666ba23b</span>
+                        <Link
+                          href="https://linkedin.com/in/tushar-gupta-5666ba23b"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-white"
+                        >
+                          linkedin.com/in/tushar-gupta-5666ba23b
+                        </Link>
                       </div>
                     </div>
-
                     <div className="absolute bottom-8 left-8 right-8 opacity-10">
                       <Code size={180} />
                     </div>
@@ -859,7 +933,29 @@ export default function PortfolioV2() {
                           className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400"
                         />
                       </div>
-                      <Button className="w-full bg-gradient-to-r from-teal-500 to-indigo-500 hover:from-teal-600 hover:to-indigo-600 text-white border-0">
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          const formData: ContactFormData = {
+                            name: (document.getElementById("name") as HTMLInputElement).value,
+                            email: (document.getElementById("email") as HTMLInputElement).value,
+                            reason: (document.getElementById("subject") as HTMLInputElement).value,
+                            message: (document.getElementById("message") as HTMLTextAreaElement).value,
+                          };
+                          handleSubmit(formData).catch((error) => console.error(error));
+
+                          const resetForm = (): void => {
+                            // alert("Message sent successfully!");
+                            (document.getElementById("name") as HTMLInputElement).value = "";
+                            (document.getElementById("email") as HTMLInputElement).value = "";
+                            (document.getElementById("subject") as HTMLInputElement).value = "";
+                            (document.getElementById("message") as HTMLTextAreaElement).value = "";
+                          };
+                          resetForm();
+                        }}
+                        
+                        className="w-full bg-gradient-to-r from-teal-500 to-indigo-500 hover:from-teal-600 hover:to-indigo-600 text-white border-0 cursor-pointer"
+                      >
                         Send Message
                       </Button>
                     </form>
