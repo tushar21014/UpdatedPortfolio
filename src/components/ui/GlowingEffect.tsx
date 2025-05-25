@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Lock, Search, Settings, Sparkles,ExternalLink, Github,} from "lucide-react";
+import { Box,ExternalLink, Github, Mails, Swords, FolderKanban, Expand,} from "lucide-react";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { LinkPreview } from "@/components/ui/link-preview";
 
@@ -45,7 +45,7 @@ export function GlowingEffectDemo() {
 
       <GridItem
         area="md:[grid-area:1/7/2/13] xl:[grid-area:2/1/3/5]"
-        icon={<Settings className="h-4 w-4 text-black dark:text-neutral-400" />}
+        icon={<Mails className="h-4 w-4 text-black dark:text-neutral-400" />}
         title="AI Email Scheduler"
         description="Automates bulk emails scheduling with different formats and attachments."
         github= "https://github.com/tushar21014/mailingsystem"
@@ -55,7 +55,7 @@ export function GlowingEffectDemo() {
 
       <GridItem
         area="md:[grid-area:2/1/3/7] xl:[grid-area:1/5/3/8]"
-        icon={<Lock className="h-4 w-4 text-black dark:text-neutral-400" />}
+        icon={<Swords className="h-4 w-4 text-black dark:text-neutral-400" />}
         title="CodeArena"
         description="1v1 friendly coding battles solving DSA questions in real-time. With multiple modes like Speed Mode, Blind Mode & Efficiency Mode."
         github= "https://github.com/tushar21014/Crowdsourced"
@@ -64,7 +64,7 @@ export function GlowingEffectDemo() {
 
       <GridItem
         area="md:[grid-area:2/7/3/13] xl:[grid-area:1/8/2/13]"
-        icon={<Sparkles className="h-4 w-4 text-black dark:text-neutral-400" />}
+        icon={<FolderKanban className="h-4 w-4 text-black dark:text-neutral-400" />}
         title="TaskSwift"
         description="Architected a dynamic scale-out solution for parallel resource deployment and concurrent request distribution, improving system performance."
         github= "https://github.com/tushar21014/TaskSwift"
@@ -73,7 +73,7 @@ export function GlowingEffectDemo() {
 
       <GridItem
         area="md:[grid-area:3/1/4/13] xl:[grid-area:2/8/3/13]"
-        icon={<Search className="h-4 w-4 text-black dark:text-neutral-400" />}
+        icon={<Expand className="h-4 w-4 text-black dark:text-neutral-400" />}
         title="Spring boot API"
         description="Created a bunch of REST APIs using Spring Boot and Java for a project. The APIs were designed to be efficient, scalable, and easy to use."
         github= "https://github.com/tushar21014/SpringBoot-API"

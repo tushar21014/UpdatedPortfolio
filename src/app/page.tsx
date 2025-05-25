@@ -14,12 +14,17 @@ import {
   Menu,
   X,
   ArrowRight,
+  Coffee,
+  Leaf,
+  Server,
+  Zap,
+  Database,
+  Globe,
+  Wrench,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { HoverEffect } from "@/components/ui/card-hover"
 import { FlipWords } from "@/components/flip-words"
 import { GlowingEffectDemo } from "@/components/ui/GlowingEffect"
 import LoadingScreen from "@/components/ui/loading-screen"
@@ -33,6 +38,7 @@ export default function PortfolioV2() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const darkMode = true
   const [isLoading, setIsLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState("Backend")
 
   // Cambiar tema claro/oscuro
   useEffect(() => {
@@ -75,16 +81,32 @@ export default function PortfolioV2() {
     { id: "home", label: "Home", icon: <Code size={18} /> },
     { id: "about", label: "About", icon: <User size={18} /> },
     { id: "projects", label: "Projects", icon: <Briefcase size={18} /> },
-    { id: "education", label: "Internships", icon: <GraduationCap size={18} /> },
+    { id: "education", label: "Education", icon: <GraduationCap size={18} /> },
     { id: "contact", label: "Contact", icon: <Mail size={18} /> },
   ]
 
-  const skills = [
-    { category: "Backend", items: ["Java", "SpringBoot", "Node.js", "Express", "MongoDB", "SQL"] },
-    { category: "Frontend", items: ["HTML", "CSS", "JavaScript", "React"] },
-    { category: "Tools", items: ["Git", "GitHub", "VS Code"] },
-  ]
-
+  const skillCategories = {
+    Backend: [
+      { name: "Java", icon: Coffee },
+      { name: "SpringBoot", icon: Leaf },
+      { name: "Node.js", icon: Server },
+      { name: "Express", icon: Zap },
+      { name: "MongoDB", icon: Database },
+      { name: "SQL", icon: Database },
+    ],
+    Frontend: [
+      { name: "React", icon: Code },
+      { name: "JavaScript", icon: Code },
+      { name: "HTML/CSS", icon: Globe },
+      { name: "TypeScript", icon: Code },
+    ],
+    Tools: [
+      { name: "Git", icon: Wrench },
+      { name: "Docker", icon: Wrench },
+      { name: "AWS", icon: Wrench },
+      { name: "Postman", icon: Wrench },
+    ],
+  }
   const words = ["robust", "scalable", "efficient", "reliable"];
 
   const education = [
@@ -124,7 +146,7 @@ export default function PortfolioV2() {
   ]
 
 
-  
+
   interface ContactFormData {
     name: string;
     email: string;
@@ -151,7 +173,7 @@ export default function PortfolioV2() {
       }
       return await response.text();
     });
-  
+
     await toast.promise(
       submissionPromise,
       {
@@ -164,11 +186,11 @@ export default function PortfolioV2() {
         error: { duration: 4000 },
       }
     );
-  
+
     return submissionPromise;
   };
-  
-  
+
+
   const CodeEditorAnimation = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const [isAnimating, setIsAnimating] = useState(true)
@@ -185,7 +207,7 @@ export default function PortfolioV2() {
         const container = canvas.parentElement
         if (container) {
           // Set a fixed aspect ratio to ensure content fits
-          const width = Math.min(600, container.clientWidth)
+          const width = Math.min(600, container.clientWidth, window.innerWidth * 0.3)
           const height = Math.min(400, width * 0.8)
 
           canvas.width = width
@@ -380,9 +402,9 @@ export default function PortfolioV2() {
     }, [isAnimating])
 
     return (
-      <div className="relative w-full mx-auto">
-        <div className="absolute top-0 left-0 right-0 h-8 bg-slate-800 rounded-t-lg flex items-center px-4">
-          <div className="flex space-x-2">
+      <div className="relative w-full mx-auto" style={{ minWidth: "30vw" }}>
+<div className="absolute top-0 left-0 right-0 h-8 w-[30vw] 2xl:w-[28.2vw] bg-slate-800 rounded-t-lg flex items-center px-4">
+<div className="flex space-x-2">
             <div className="w-3 h-3 rounded-full bg-red-500"></div>
             <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
             <div className="w-3 h-3 rounded-full bg-green-500"></div>
@@ -401,7 +423,7 @@ export default function PortfolioV2() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0f172a] text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
-            <Toaster />
+      <Toaster />
 
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-[#0f172a]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
@@ -513,9 +535,9 @@ export default function PortfolioV2() {
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <a href="https://github.com/tushar21014" target="_blank" rel="noopener noreferrer">
-                  <Button className="bg-gradient-to-r from-teal-500 to-indigo-500 hover:from-teal-600 hover:to-indigo-600 text-white border-0 cursor-pointer">
-                    View Projects <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                    <Button className="bg-gradient-to-r from-teal-500 to-indigo-500 hover:from-teal-600 hover:to-indigo-600 text-white border-0 cursor-pointer">
+                      View Projects <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
                   </a>
                   {/* <Button variant="outline" className="border-gray-300 dark:border-gray-700">
                     Descargar CV
@@ -618,29 +640,50 @@ export default function PortfolioV2() {
                 </div>
               </div>
 
+              {/* Right Column - Skills */}
               <div>
-                <h3 className="text-2xl font-semibold mb-6">Skills</h3>
-                <Tabs defaultValue="Backend" className="w-full">
-                  <TabsList className="grid grid-cols-3 mb-6">
-                    {skills.map((skill) => (
-                      <TabsTrigger key={skill.category} value={skill.category}>
-                        {skill.category}
-                      </TabsTrigger>
+                <h2 className="text-3xl font-bold mb-8 text-center">Skills</h2>
+
+                <div className="flex flex-col md:flex-row justify-center gap-2 md:gap-0 mb-8">
+                  <div className="bg-slate-800 p-1 rounded-lg border border-slate-700 flex flex-col md:flex-row">
+                    {Object.keys(skillCategories).map((category) => (
+                      <button
+                        key={category}
+                        onClick={() => setActiveTab(category)}
+                        className={`px-6 py-2 rounded-md transition-all duration-200 ${activeTab === category
+                          ? "bg-cyan-500 text-white shadow-lg"
+                          : "text-gray-400 hover:text-white hover:bg-slate-700"
+                          }`}
+                      >
+                        {category}
+                      </button>
                     ))}
-                  </TabsList>
+                  </div>
+                </div>
 
-                  {skills.map((skill) => (
-                    <TabsContent key={skill.category} value={skill.category} className="mt-0">
-                      <HoverEffect
-                        items={skill.items.map((item) => ({
-                          title: item,
-                        }))}
-                      />
-                    </TabsContent>
-                  ))}
-                </Tabs>
+
+                {/* Skills Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {skillCategories[activeTab as keyof typeof skillCategories].map((skill, index) => {
+                    const IconComponent = skill.icon
+                    return (
+                      <div
+                        key={skill.name}
+                        className="group bg-slate-800 p-6 rounded-xl border border-slate-700 hover:border-cyan-500 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20 hover:-translate-y-1 cursor-pointer"
+                      >
+                        <div className="flex flex-col items-center text-center space-y-3">
+                          <div className="p-3 bg-slate-700 rounded-xl group-hover:bg-cyan-500 transition-all duration-300 group-hover:scale-110">
+                            <IconComponent className="w-6 h-6 text-cyan-400 group-hover:text-white transition-colors duration-300" />
+                          </div>
+                          <h3 className="font-semibold text-white group-hover:text-cyan-400 transition-colors duration-300">
+                            {skill.name}
+                          </h3>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
-
             </div>
           </div>
         </section>
@@ -654,7 +697,7 @@ export default function PortfolioV2() {
               </Badge>
               <h2 className="text-3xl font-bold mb-4">My recent work</h2>
               <p className="text-gray-600 dark:text-gray-300">
-              Here is a selection of projects I have worked on recently.</p>
+                Here is a selection of projects I have worked on recently.</p>
             </div>
 
             <GlowingEffectDemo />
@@ -713,9 +756,9 @@ export default function PortfolioV2() {
 
             <div className="text-center mt-12">
               <a href="https://github.com/tushar21014" target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" className="border-gray-300 dark:border-gray-700 cursor-pointer">
-                View My Projects
-              </Button>
+                <Button variant="outline" className="border-gray-300 dark:border-gray-700 cursor-pointer">
+                  View My Projects
+                </Button>
               </a>
             </div>
           </div>
@@ -783,7 +826,7 @@ export default function PortfolioV2() {
                             <div className="w-3 h-3 rounded-full bg-gradient-to-r from-teal-500 to-indigo-500"></div>
                           </div>
                           {subIndex !== internships.length - 1 && (
-                            <div className="w-0.5 h-[27%] absolute bg-gray-200 dark:bg-gray-700 ml-6 mt-2"></div>
+                            <div className="w-0.5 h-[24vh] lg:h-[24vh] xl:h-[18.5vh] absolute bg-gray-200 dark:bg-gray-700 ml-6 mt-2"></div>
                           )}
                         </div>
 
@@ -879,34 +922,31 @@ export default function PortfolioV2() {
 
                   <div className="md:col-span-3 p-8 z-10">
                     <form className="space-y-6">
-                      <div className="grid grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <label
-                            htmlFor="name"
-                            className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300"
-                          >
+                          <label htmlFor="name" className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
                             Name
                           </label>
                           <input
                             type="text"
                             id="name"
+                            placeholder="Your Name"
                             className="w-full z-10 px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400"
                           />
                         </div>
                         <div>
-                          <label
-                            htmlFor="email"
-                            className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300"
-                          >
+                          <label htmlFor="email" className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
                             Email
                           </label>
                           <input
                             type="email"
                             id="email"
+                            placeholder="youremail@gmail.com"
                             className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400"
                           />
                         </div>
                       </div>
+
                       <div>
                         <label
                           htmlFor="subject"
@@ -917,6 +957,7 @@ export default function PortfolioV2() {
                         <input
                           type="text"
                           id="subject"
+                          placeholder="Subject or Reason for Contact"
                           className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400"
                         />
                       </div>
@@ -930,6 +971,7 @@ export default function PortfolioV2() {
                         <textarea
                           id="message"
                           rows={5}
+                          placeholder="Your message here..."
                           className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400"
                         />
                       </div>
@@ -953,7 +995,7 @@ export default function PortfolioV2() {
                           };
                           resetForm();
                         }}
-                        
+
                         className="w-full bg-gradient-to-r from-teal-500 to-indigo-500 hover:from-teal-600 hover:to-indigo-600 text-white border-0 cursor-pointer"
                       >
                         Send Message
