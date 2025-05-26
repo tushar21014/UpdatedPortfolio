@@ -403,7 +403,7 @@ export default function PortfolioV2() {
 
     return (
       <div className="relative w-full mx-auto" style={{ minWidth: "30vw" }}>
-<div className="absolute top-0 left-0 right-0 h-8 w-[30vw] 2xl:w-[28.2vw] bg-slate-800 rounded-t-lg flex items-center px-4">
+<div className="customResponse absolute top-0 left-0 right-0 h-8 bg-slate-800 rounded-t-lg flex items-center px-4">
 <div className="flex space-x-2">
             <div className="w-3 h-3 rounded-full bg-red-500"></div>
             <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -826,7 +826,7 @@ export default function PortfolioV2() {
                             <div className="w-3 h-3 rounded-full bg-gradient-to-r from-teal-500 to-indigo-500"></div>
                           </div>
                           {subIndex !== internships.length - 1 && (
-                            <div className="w-0.5 h-[24vh] lg:h-[24vh] xl:h-[18.5vh] absolute bg-gray-200 dark:bg-gray-700 ml-6 mt-2"></div>
+                            <div className="h-[21.2vh] w-0.5 absolute bg-gray-200 dark:bg-gray-700 ml-6 mt-2"></div>
                           )}
                         </div>
 

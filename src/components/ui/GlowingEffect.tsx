@@ -58,7 +58,7 @@ export function GlowingEffectDemo() {
         icon={<Swords className="h-4 w-4 text-black dark:text-neutral-400" />}
         title="CodeArena"
         description="1v1 friendly coding battles solving DSA questions in real-time. With multiple modes like Speed Mode, Blind Mode & Efficiency Mode."
-        github= "https://github.com/tushar21014/Crowdsourced"
+        github= "https://github.com/tushar21014/Codearena"
 
       />
 

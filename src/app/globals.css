@@ -124,3 +124,41 @@ html{
     @apply bg-background text-foreground;
   }
 }
+
+.internship-line {
+  width: 2px;
+  height: 20vh;
+  background-color: #e5e7eb; /* default light gray */
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.dark .internship-line {
+  background-color: #374151; /* dark mode gray */
+}
+/* 
+@media (min-width: 1024px) {
+  .internship-line {
+    height: 24vh;
+  }
+} */
+
+
+
+@media (max-width: 1280px) {
+  .internship-line {
+    height: 21vh;
+  }
+}
+
+
+@media (min-width: 1500px) {
+  .customResponse {
+    width: 30vw;
+  }
+
+  .internship-line{
+    height: 17.2vh;
+  }
+  
+}
